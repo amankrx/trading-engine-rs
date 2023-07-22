@@ -44,6 +44,30 @@ impl Client {
         let response = request.send().await?;
         Ok(response)
     }
+
+    pub async fn post(&self, uri: &str, body: &str) -> Result<reqwest::Response, ErrorType> {
+        let endpoint = format!("{}{}", self.config.base_url, uri);
+        let request = self.client.post(endpoint).body(body.to_string());
+        let request = self.authenticate_request(request).await?;
+        let response = request.send().await?;
+        Ok(response)
+    }
+
+    pub async fn delete(&self, uri: &str) -> Result<reqwest::Response, ErrorType> {
+        let endpoint = format!("{}{}", self.config.base_url, uri);
+        let request = self.client.delete(endpoint);
+        let request = self.authenticate_request(request).await?;
+        let response = request.send().await?;
+        Ok(response)
+    }
+
+    pub async fn patch(&self, uri: &str, body: &str) -> Result<reqwest::Response, ErrorType> {
+        let endpoint = format!("{}{}", self.config.base_url, uri);
+        let request = self.client.patch(endpoint).body(body.to_string());
+        let request = self.authenticate_request(request).await?;
+        let response = request.send().await?;
+        Ok(response)
+    }
 }
 
 impl ClientConfig {
